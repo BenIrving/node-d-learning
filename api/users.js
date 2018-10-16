@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../model/User");
+const Role = require("../model/Role");
 const bcrypt = require("bcryptjs");
 const keys = require("../config/keys");
 const jwt = require("jsonwebtoken");
@@ -12,10 +13,7 @@ router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    console.log("inside method GetAll users");
-    User.findAll().then(users =>
-      users.forEach(user => console.log(user.userName))
-    );
+    console.log("inside method GetAll users", req.user.roles[0].roleName);
     res.json({ data: "read from sql, coming soon" });
   }
 );

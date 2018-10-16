@@ -1,9 +1,9 @@
 module.exports = {
-  host: "", //Put your hosting info here
-  dbname: "", //put db name here
-  secretKey: "", //Put secret key here
-  dbusername: "", //put your user name here
-  dbpassword: "", //put your password here
+  host: "localhost", //Put your hosting info here
+  dbname: "bookbuddy", //put db name here
+  secretKey: "secret", //Put secret key here
+  dbusername: "root", //put your user name here
+  dbpassword: "Liverpool1", //put your password here
   dialect: "mysql",
   tokenExpiryTime:
     24 * //hour

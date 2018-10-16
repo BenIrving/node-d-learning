@@ -5,6 +5,10 @@ const sequelize = new Sequelize(keys.dbname, keys.dbusername, keys.dbpassword, {
   host: keys.host,
   dialect: keys.dialect,
   operatorsAliases: false,
+  define: {
+    timestamps: false,
+    freezeTableName: true
+  },
 
   pool: {
     max: 5,
