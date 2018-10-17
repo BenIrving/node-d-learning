@@ -36,6 +36,7 @@ const User = sequelize.define(
 );
 User.belongsToMany(Role, { through: "user_role", foreignKey: "userId" });
 Role.belongsToMany(User, { through: "user_role", foreignKey: "roleId" });
+
 User.sync({ force: false }).then(() => console.log("User model synchronized"));
 
 const columnNames = {

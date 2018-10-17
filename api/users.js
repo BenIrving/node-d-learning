@@ -6,15 +6,21 @@ const bcrypt = require("bcryptjs");
 const keys = require("../config/keys");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
+const { requireAdmin, requireStudent } = require("../middleware/authurization");
+
 // @route     GET /users
 // @desc      Returns users list
 // @access    Public
 router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
+  requireAdmin,
   (req, res) => {
     console.log("inside method GetAll users", req.user.roles[0].roleName);
-    res.json({ data: "read from sql, coming soon" });
+    User.findAll().then(users => {
+      const usersName = users.map(user => user.userName);
+      return res.json(usersName);
+    });
   }
 );
 
@@ -55,9 +61,16 @@ router.post("/", (req, res) => {
 router.post("/login", (req, res) => {
   const userName = req.body.userName;
   const password = req.body.password;
-  User.findOne({ where: { userName } }).then(user => {
+  User.findOne({
+    where: { userName },
+    include: [
+      {
+        model: Role,
+        attributes: ["roleName"]
+      }
+    ]
+  }).then(user => {
     if (!user) return res.status(404).json({ email: "User not found" });
-    //check password
     bcrypt.compare(password, user.passwordHash).then(isMatch => {
       if (isMatch) {
         const payLoad = { id: user.userId, name: user.userName };

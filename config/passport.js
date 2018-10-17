@@ -23,29 +23,10 @@ module.exports = passport => {
         ]
       })
         .then(user => {
-          console.log(`************************** ${user}`);
           if (user) return done(null, user);
           return done(null, false);
         })
-        //;
-        // User.findById(jwtPayload.id)
-        //   .then(user => {
-        //     if (user) return done(null, user);
-        //     return done(null, false);
-        //   })
         .catch(err => console.log(err));
     })
   );
 };
-
-/**
- * User.findAll({
-  include: [{
-    model: Project,
-    through: {
-      attributes: ['createdAt', 'startedAt', 'finishedAt'],
-      where: {completed: true}
-    }
-  }]
-});
- */
