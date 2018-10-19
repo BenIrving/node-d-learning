@@ -1,6 +1,7 @@
 const sequelize = require("../db/db");
 const Sequelize = require("Sequelize");
 const Role = require("./Role");
+const Avatar = require("./Avatar");
 
 const User = sequelize.define(
   "user",
@@ -37,10 +38,6 @@ const User = sequelize.define(
 User.belongsToMany(Role, { through: "user_role", foreignKey: "userId" });
 Role.belongsToMany(User, { through: "user_role", foreignKey: "roleId" });
 
-User.sync({ force: false }).then(() => console.log("User model synchronized"));
-
-const columnNames = {
-  userId: "userId"
-};
+Avatar.belongsTo(User, { foreignKey: "userId" });
 
 module.exports = User;

@@ -20,5 +20,4 @@ const Role = sequelize.define(
   }
 );
 
-Role.sync({ force: false }).then(() => console.log("Role model synchronized"));
 module.exports = Role;
