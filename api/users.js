@@ -7,6 +7,7 @@ const bcrypt = require("bcryptjs");
 const keys = require("../config/keys");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
+const AvatarService = require("../service/AvatarService");
 const {
   requireAdmin,
   requireStudent,
@@ -62,7 +63,7 @@ router.get(
       message: null,
       httpStatus: "ok"
     };
-    Avatar.findOne({ where: { userId: req.user.userId } })
+    AvatarService.findByProperty({ userId: req.user.userId })
       .then(avatar => {
         if (!avatar) return res.status(404).json(avatarResp);
         avatarResp.data.hasAvatar = true;
