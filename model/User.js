@@ -1,7 +1,8 @@
 const sequelize = require("../db/db");
 const Sequelize = require("Sequelize");
-const Role = require("./Role");
 const Avatar = require("./Avatar");
+const Role = require("./Role");
+const Group = require("./Group");
 
 const User = sequelize.define(
   "user",
@@ -37,6 +38,9 @@ const User = sequelize.define(
 );
 User.belongsToMany(Role, { through: "user_role", foreignKey: "userId" });
 Role.belongsToMany(User, { through: "user_role", foreignKey: "roleId" });
+
+User.belongsToMany(Group, { through: "user_groups", foreignKey: "userId" });
+Group.belongsToMany(User, { through: "user_groups", foreignKey: "groupId" });
 
 Avatar.belongsTo(User, { foreignKey: "userId" });
 

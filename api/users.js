@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../model/User");
+
 const Role = require("../model/Role");
 const Avatar = require("../model/Avatar");
 const bcrypt = require("bcryptjs");
@@ -22,7 +23,6 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   requireAdmin,
   (req, res) => {
-    console.log("inside method GetAll users", req.user.roles[0].roleName);
     User.findAll().then(users => {
       const usersName = users.map(user => user.userName);
       return res.json(usersName);
@@ -63,7 +63,8 @@ router.get(
       message: null,
       httpStatus: "ok"
     };
-    AvatarService.findByProperty({ userId: req.user.userId })
+    AvatarService.findByProp;
+    erty({ userId: req.user.userId })
       .then(avatar => {
         if (!avatar) return res.status(404).json(avatarResp);
         avatarResp.data.hasAvatar = true;
@@ -152,7 +153,10 @@ router.post("/login", (req, res) => {
     if (!user) return res.status(404).json({ email: "User not found" });
     bcrypt.compare(password, user.passwordHash).then(isMatch => {
       if (isMatch) {
-        const payLoad = { id: user.userId, name: user.userName };
+        const payLoad = {
+          id: user.userId,
+          name: user.userName
+        };
         jwt.sign(
           payLoad,
           keys.secretKey,

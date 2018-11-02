@@ -1,6 +1,14 @@
 const User = require("../model/User");
 
-const findByProperty = (property, options) => User.findOne(property, options);
+const findByProperty = (property = {}, { include } = {}) => {
+  console.log(property);
+  return User.findOne({ where: property, include });
+};
+
+const findAll = (property = {}, { include } = {}) => {
+  console.log(property);
+  return User.findAll({ where: property, include });
+};
 
 const findOne = obj => {
   return new Promise((resolve, reject) => {
@@ -17,5 +25,6 @@ const find = () => {
 
 module.exports = {
   findOne,
-  findByProperty
+  findByProperty,
+  findAll
 };
