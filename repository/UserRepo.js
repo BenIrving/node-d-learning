@@ -1,14 +1,10 @@
 const User = require("../model/User");
 
-const findByProperty = (property = {}, { include } = {}) => {
-  console.log(property);
-  return User.findOne({ where: property, include });
-};
+const findByProperty = (property = {}, { include } = {}) =>
+  User.findOne({ where: property, include });
 
-const findAll = (property = {}, { include } = {}) => {
-  console.log(property);
-  return User.findAll({ where: property, include });
-};
+const findAll = (property = {}, { include } = {}) =>
+  User.findAll({ where: property, include });
 
 const findOne = obj => {
   return new Promise((resolve, reject) => {

@@ -20,7 +20,4 @@ const Genre = sequelize.define(
   }
 );
 
-Genre.belongsToMany(Story, { through: "story_genre", foreignKey: "genreId" });
-Story.belongsToMany(Genre, { through: "story_genre", foreignKey: "storyId" });
-
 module.exports = Genre;

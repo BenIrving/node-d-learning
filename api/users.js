@@ -139,7 +139,7 @@ router.post("/", (req, res) => {
 // @desc      user Login
 // @access    Public
 router.post("/login", (req, res) => {
-  const userName = req.body.userName;
+  const userName = req.body.username;
   const password = req.body.password;
   User.findOne({
     where: { userName },

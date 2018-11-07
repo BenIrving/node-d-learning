@@ -17,4 +17,22 @@ router.get(
   }
 );
 
+router.get(
+  "/my-story",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    storyService.getLoggedInUserStories(req.user).then(myStoryResp => {
+      res.json(myStoryResp);
+    });
+  }
+);
+
+router.get(
+  "/story-reduced/:storyId",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    storyService.getClassfellowStoryById(req.user, req.params.storyId);
+  }
+);
+
 module.exports = router;

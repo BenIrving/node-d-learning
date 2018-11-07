@@ -7,6 +7,8 @@ const StorySubcategory = require("./StorySubcategory");
 const UpdateRecord = require("./UpdateRecord");
 const Topic = require("./Topic");
 const Comment = require("./Comment");
+const Genre = require("./Genre");
+const Feedback = require("./Feedback");
 
 const Story = sequelize.define(
   "story",
@@ -41,4 +43,7 @@ Story.belongsTo(Topic, { foreignKey: "topicId" });
 Story.belongsTo(StorySubcategory, { foreignKey: "subcategoryId" });
 Story.belongsTo(UpdateRecord, { foreignKey: "updateRecordId" });
 Story.hasMany(Comment, { foreignKey: "storyId" });
+Genre.belongsToMany(Story, { through: "story_genre", foreignKey: "genreId" });
+Story.belongsToMany(Genre, { through: "story_genre", foreignKey: "storyId" });
+Story.hasMany(Feedback, { foreignKey: "storyId" });
 module.exports = Story;

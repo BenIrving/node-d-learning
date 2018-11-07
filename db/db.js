@@ -9,6 +9,7 @@ const sequelize = new Sequelize(keys.dbname, keys.dbusername, keys.dbpassword, {
     timestamps: false,
     freezeTableName: true
   },
+  // logging: false,
 
   pool: {
     max: 5,
@@ -17,5 +18,9 @@ const sequelize = new Sequelize(keys.dbname, keys.dbusername, keys.dbpassword, {
     idle: 10000
   }
 });
+
+// const db = {};
+// db.Sequelize = Sequelize;
+// db.sequelize = sequelize;
 
 module.exports = sequelize;
