@@ -1,22 +1,26 @@
-const sequelize = require("../db/db");
-const Sequelize = require("Sequelize");
-
-const Role = sequelize.define(
-  "role",
-  {
-    roleId: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+module.exports = (sequelize, DataTypes) => {
+  const Role = sequelize.define(
+    "role",
+    {
+      roleId: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+      },
+      roleName: {
+        type: DataTypes.STRING(255)
+      }
     },
-    roleName: {
-      type: Sequelize.STRING(255)
+    {
+      freezeTableName: true,
+      timestamps: false
     }
-  },
-  {
-    freezeTableName: true,
-    timestamps: false
-  }
-);
-
-module.exports = Role;
+  );
+  Role.associate = models => {
+    models.Role.belongsToMany(models.User, {
+      through: "user_role",
+      foreignKey: "roleId"
+    });
+  };
+  return Role;
+};

@@ -1,22 +1,22 @@
 const sequelize = require("../db/db");
 const Sequelize = require("Sequelize");
-
-const StorySubcategory = sequelize.define(
-  "story_subcategory",
-  {
-    subcategoryId: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+module.exports = (sequelize, DataTypes) => {
+  const StorySubcategory = sequelize.define(
+    "story_subcategory",
+    {
+      subcategoryId: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+      },
+      subcategoryName: {
+        type: DataTypes.STRING(255)
+      }
     },
-    subcategoryName: {
-      type: Sequelize.STRING(255)
+    {
+      freezeTableName: true,
+      timestamps: false
     }
-  },
-  {
-    freezeTableName: true,
-    timestamps: false
-  }
-);
-
-module.exports = StorySubcategory;
+  );
+  return StorySubcategory;
+};

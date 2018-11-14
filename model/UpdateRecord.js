@@ -1,29 +1,27 @@
-const sequelize = require("../db/db");
-const Sequelize = require("Sequelize");
-const User = require("./User");
-
-const UpdateRecord = sequelize.define(
-  "update_record",
-  {
-    updateRecordId: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+module.exports = (sequelize, DataTypes) => {
+  const UpdateRecord = sequelize.define(
+    "update_record",
+    {
+      updateRecordId: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+      },
+      createdDate: {
+        type: DataTypes.DATE
+      },
+      updatedDate: {
+        type: DataTypes.DATE
+      }
     },
-    createdDate: {
-      type: Sequelize.DATE
-    },
-    updatedDate: {
-      type: Sequelize.DATE
+    {
+      freezeTableName: true,
+      timestamps: false
     }
-  },
-  {
-    freezeTableName: true,
-    timestamps: false
-  }
-);
-
-UpdateRecord.belongsTo(User, { foreignKey: "createdBy" });
-UpdateRecord.belongsTo(User, { foreignKey: "updatedBy" });
-
-module.exports = UpdateRecord;
+  );
+  UpdateRecord.associate = models => {
+    models.UpdateRecord.belongsTo(models.User, { foreignKey: "createdBy" });
+    models.UpdateRecord.belongsTo(models.User, { foreignKey: "updatedBy" });
+  };
+  return UpdateRecord;
+};

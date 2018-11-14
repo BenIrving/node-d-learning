@@ -1,22 +1,20 @@
-const sequelize = require("../db/db");
-const Sequelize = require("Sequelize");
-
-const StoryStatus = sequelize.define(
-  "story_status",
-  {
-    storyStatusId: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+module.exports = (sequelize, DataTypes) => {
+  const StoryStatus = sequelize.define(
+    "story_status",
+    {
+      storyStatusId: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+      },
+      statusName: {
+        type: DataTypes.STRING(255)
+      }
     },
-    statusName: {
-      type: Sequelize.STRING(255)
+    {
+      freezeTableName: true,
+      timestamps: false
     }
-  },
-  {
-    freezeTableName: true,
-    timestamps: false
-  }
-);
-
-module.exports = StoryStatus;
+  );
+  return StoryStatus;
+};

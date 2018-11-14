@@ -1,48 +1,43 @@
-const Story = require("../model/Story");
-const User = require("../model/User");
-const StoryStatus = require("../model/StoryStatus");
-const UpdateRecord = require("../model/UpdateRecord");
-const sequelize = require("../db/db");
-
-const findByProperty = (property, { include }) =>
-  Story.findOne({ where: property, include });
+const db = require("../model");
+const findByProperty = (property, { include } = {}) =>
+  db.Story.findOne({ where: property, include });
 
 const findAll = (property, { include } = {}) =>
-  Story.findAll({ where: property, include });
+  db.Story.findAll({ where: property, include });
 
 const findByStoryStatusAndUserIds = (attributes, storyStatus, userIds) => {
-  return Story.findAll({
+  return models.Story.findAll({
     attributes: attributes,
     include: [
       {
-        model: User,
+        model: models.User,
         where: { userId: userIds },
         attributes: [],
         require: true
       },
       {
-        model: StoryStatus,
+        model: models.StoryStatus,
         where: { statusName: storyStatus },
         attributes: [],
         require: true
       },
       {
-        model: UpdateRecord
+        model: models.UpdateRecord
       }
     ]
   });
 };
 
 const findLoggedInUserStories = user =>
-  sequelize.query(storyByUserQuery, {
+  db.sequelize.query(storyByUserQuery, {
     replacements: [user.userId],
-    type: sequelize.QueryTypes.SELECT
+    type: db.sequelize.QueryTypes.SELECT
   });
 
 const validateGroup = (userId, storyId) =>
-  sequelize.query(userExistInGroupQuery, {
+  db.sequelize.query(userExistInGroupQuery, {
     replacements: [userId, storyId],
-    type: sequelize.QueryTypes.SELECT
+    type: db.sequelize.QueryTypes.SELECT
   });
 
 module.exports = {

@@ -1,39 +1,39 @@
-const sequelize = require("../db/db");
-const Sequelize = require("Sequelize");
-const User = require("./User");
-const UpdateRecord = require("./UpdateRecord");
-const Story = require("./Story");
-const Notification = sequelize.define(
-  "notification",
-  {
-    notificationId: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+module.exports = (sequelize, DataTypes) => {
+  const Notification = sequelize.define(
+    "notification",
+    {
+      notificationId: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+      },
+      isRead: {
+        type: DataTypes.INTEGER
+      },
+      clickable: {
+        type: DataTypes.BOOLEAN
+      },
+      location: {
+        type: DataTypes.STRING(20)
+      },
+      description: {
+        type: DataTypes.STRING(500)
+      },
+      emoji: {
+        type: DataTypes.STRING(20)
+      }
     },
-    isRead: {
-      type: Sequelize.INTEGER
-    },
-    clickable: {
-      type: Sequelize.BOOLEAN
-    },
-    location: {
-      type: Sequelize.STRING(20)
-    },
-    description: {
-      type: Sequelize.STRING(500)
-    },
-    emoji: {
-      type: Sequelize.STRING(20)
+    {
+      freezeTableName: true,
+      timestamps: false
     }
-  },
-  {
-    freezeTableName: true,
-    timestamps: false
-  }
-);
-Notification.belongsTo(User, { foreignKey: "userId" });
-Notification.belongsTo(UpdateRecord, { foreignKey: "updateRecordId" });
-Notification.belongsTo(Story, { foreignKey: "storyId" });
-
-module.exports = Notification;
+  );
+  Notification.associate = models => {
+    models.Notification.belongsTo(models.User, { foreignKey: "userId" });
+    models.Notification.belongsTo(models.UpdateRecord, {
+      foreignKey: "updateRecordId"
+    });
+    models.Notification.belongsTo(models.Story, { foreignKey: "storyId" });
+  };
+  return Notification;
+};

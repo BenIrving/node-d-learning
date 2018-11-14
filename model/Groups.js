@@ -1,19 +1,13 @@
-const sequelize = require("../db/db");
-const Sequelize = require("Sequelize");
-const Avatar = require("./Avatar");
 module.exports = (sequelize, DataTypes) => {
-  const Topic = sequelize.define(
-    "topic",
+  const Groups = sequelize.define(
+    "groups",
     {
-      topicId: {
+      groupId: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
       },
-      topicDetail: {
-        type: DataTypes.TEXT
-      },
-      topicName: {
+      groupName: {
         type: DataTypes.STRING(255)
       }
     },
@@ -22,5 +16,8 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false
     }
   );
-  return Topic;
+  Groups.associate = models => {
+    models.Groups.belongsTo(models.School, { foreignKey: "schoolId" });
+  };
+  return Groups;
 };

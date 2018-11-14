@@ -31,7 +31,11 @@ router.get(
   "/story-reduced/:storyId",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    storyService.getClassfellowStoryById(req.user, req.params.storyId);
+    storyService
+      .getClassfellowStoryById(req.user, req.params.storyId)
+      .then(respObj => {
+        return res.json(respObj);
+      });
   }
 );
 

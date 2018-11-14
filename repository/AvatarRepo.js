@@ -1,19 +1,6 @@
-const Avatar = require("../model/Avatar");
+const models = require("../model");
 
-const findByProperty = property => Avatar.findOne({ where: property });
-
-// const findOne = obj => {
-//   return new Promise((resolve, reject) => {
-//     Profile.findOne(obj)
-//       .populate("user", ["name", "avatar"])
-//       .then(profile => resolve(profile))
-//       .catch(err => reject(err));
-//   });
-// };
-
-// const find = () => {
-//   return Profile.find().populate("user", ["name", "avatar"]);
-// };
+const findByProperty = property => models.Avatar.findOne({ where: property });
 
 module.exports = {
   findByProperty

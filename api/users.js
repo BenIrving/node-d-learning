@@ -1,14 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../model/User");
-
-const Role = require("../model/Role");
-const Avatar = require("../model/Avatar");
 const bcrypt = require("bcryptjs");
 const keys = require("../config/keys");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const AvatarService = require("../service/AvatarService");
+const models = require("../model");
 const {
   requireAdmin,
   requireStudent,
@@ -23,7 +20,7 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   requireAdmin,
   (req, res) => {
-    User.findAll().then(users => {
+    models.User.findAll().then(users => {
       const usersName = users.map(user => user.userName);
       return res.json(usersName);
     });
@@ -37,7 +34,7 @@ router.get(
   "/avatar",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Avatar.findOne({ where: { userId: req.user.userId } })
+    models.Avatar.findOne({ where: { userId: req.user.userId } })
       .then(avatar => {
         if (!avatar)
           return res
@@ -63,8 +60,7 @@ router.get(
       message: null,
       httpStatus: "ok"
     };
-    AvatarService.findByProp;
-    erty({ userId: req.user.userId })
+    AvatarService.findByProperty({ userId: req.user.userId })
       .then(avatar => {
         if (!avatar) return res.status(404).json(avatarResp);
         avatarResp.data.hasAvatar = true;
@@ -89,7 +85,7 @@ router.put(
       message: "Avatar successfully saved",
       httpStatus: "Ok"
     };
-    Avatar.findOne({ where: { userId: req.user.userId } })
+    models.Avatar.findOne({ where: { userId: req.user.userId } })
       .then(avatar => {
         if (!avatar) {
           const newAvatar = new Avatar({ ...body, userId: req.user.userId });
@@ -109,12 +105,12 @@ router.put(
 // @access    Public
 router.post("/", (req, res) => {
   console.log("inside post request " + req.body.userName);
-  User.findOne({ where: { userName: req.body.userName } }).then(user => {
+  models.User.findOne({ where: { userName: req.body.userName } }).then(user => {
     if (user)
       return res.status(404).json({
         userAlreadyExists: "User Already exists" + user
       });
-    const newUser = new User({
+    const newUser = new models.User({
       email: req.body.email,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -141,11 +137,11 @@ router.post("/", (req, res) => {
 router.post("/login", (req, res) => {
   const userName = req.body.username;
   const password = req.body.password;
-  User.findOne({
+  models.User.findOne({
     where: { userName },
     include: [
       {
-        model: Role,
+        model: models.Role,
         attributes: ["roleName"]
       }
     ]

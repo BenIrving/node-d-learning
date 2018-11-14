@@ -1,5 +1,6 @@
+const models = app.get("models");
 const findOne = (property, { include }) =>
-  User.findOne({ where: property, include });
+  models.User.findOne({ where: property, include });
 module.exports = {
   findOne
 };

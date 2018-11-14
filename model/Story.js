@@ -1,49 +1,49 @@
-const sequelize = require("../db/db");
-const Sequelize = require("Sequelize");
-const User = require("./User");
-const StoryStatus = require("./StoryStatus");
-const StoryType = require("./StoryType");
-const StorySubcategory = require("./StorySubcategory");
-const UpdateRecord = require("./UpdateRecord");
-const Topic = require("./Topic");
-const Comment = require("./Comment");
-const Genre = require("./Genre");
-const Feedback = require("./Feedback");
-
-const Story = sequelize.define(
-  "story",
-  {
-    storyId: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+module.exports = (sequelize, DataTypes) => {
+  const Story = sequelize.define(
+    "story",
+    {
+      storyId: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+      },
+      detail: {
+        type: DataTypes.TEXT
+      },
+      storyImage: {
+        type: DataTypes.TEXT
+      },
+      thumbnail: {
+        type: DataTypes.TEXT
+      },
+      title: {
+        type: DataTypes.TEXT
+      }
     },
-    detail: {
-      type: Sequelize.TEXT
-    },
-    storyImage: {
-      type: Sequelize.TEXT
-    },
-    thumbnail: {
-      type: Sequelize.TEXT
-    },
-    title: {
-      type: Sequelize.TEXT
+    {
+      freezeTableName: true,
+      timestamps: false
     }
-  },
-  {
-    freezeTableName: true,
-    timestamps: false
-  }
-);
-Story.belongsTo(User, { foreignKey: "userId" });
-Story.belongsTo(StoryStatus, { foreignKey: "statusId" });
-Story.belongsTo(StoryType, { foreignKey: "typeId" });
-Story.belongsTo(Topic, { foreignKey: "topicId" });
-Story.belongsTo(StorySubcategory, { foreignKey: "subcategoryId" });
-Story.belongsTo(UpdateRecord, { foreignKey: "updateRecordId" });
-Story.hasMany(Comment, { foreignKey: "storyId" });
-Genre.belongsToMany(Story, { through: "story_genre", foreignKey: "genreId" });
-Story.belongsToMany(Genre, { through: "story_genre", foreignKey: "storyId" });
-Story.hasMany(Feedback, { foreignKey: "storyId" });
-module.exports = Story;
+  );
+
+  Story.associate = models => {
+    models.Story.belongsTo(models.User, { foreignKey: "userId" });
+    models.Story.belongsTo(models.StoryStatus, { foreignKey: "statusId" });
+    models.Story.belongsTo(models.StoryType, { foreignKey: "typeId" });
+    models.Story.belongsTo(models.Topic, { foreignKey: "topicId" });
+    models.Story.belongsTo(models.StorySubcategory, {
+      foreignKey: "subcategoryId"
+    });
+    models.Story.belongsTo(models.UpdateRecord, {
+      foreignKey: "updateRecordId"
+    });
+    models.Story.hasMany(models.Comment, { foreignKey: "storyId" });
+    models.Story.belongsToMany(models.Genre, {
+      through: "story_genre",
+      foreignKey: "storyId"
+    });
+    models.Story.hasMany(models.Feedback, { foreignKey: "storyId" });
+    models.Comment.hasMany(models.Comment, { foreignKey: "storyId" });
+  };
+  return Story;
+};

@@ -1,8 +1,8 @@
 const storyRepo = require("../repository/StoryRepo");
 const userService = require("../service/userService");
 const storyStatusConst = require("../util/const/story_status");
-const Group = require("../model/Group");
-const Feedback = require("../model/Feedback");
+const models = require("../model");
+const feedbackMapper = require("../mapper/feedbackMapper");
 
 const findByProperty = (property, options) =>
   storyRepo.findByProperty(property, options);
@@ -75,19 +75,21 @@ const getClassfellowStoryById = async (user, storyId) => {
     if (count && count[0].exist != 1)
       return { message: "Unauthorized to read other classfellow story" };
     else {
-      const story = await storyRepo.findByProperty(
-        { storyId: storyId },
-        {
-          include: [
-            {
-              model: Feedback
-            }
-          ]
-        }
-      );
+      const story = await storyRepo.findByProperty({ storyId: storyId });
       const feedbacks = await story.getFeedbacks();
+      const feedbackDtos = await feedbackMapper.convertToDto(feedbacks);
       const user = await story.getUser();
       const avatar = await user.getAvatar();
+      const genres = await story.getGenres();
+      const comments = await story.getComments();
+      const genreNames = await genres.map(genre => genre.genreName);
+
+      story.storyImage = null;
+      story.thumbnail = null;
+      const storyJson = story.toJSON();
+      storyJson.feedbacks = feedbackDtos;
+      storyJson.genres = genreNames;
+      return storyJson;
     }
   } catch (error) {
     console.log(error);

@@ -1,9 +1,8 @@
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
-const User = require("../model/User");
 const keys = require("../config/keys");
-const Role = require("../model/Role");
 const UserService = require("../service/userService");
+const models = require("../model");
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = keys.secretKey;
@@ -15,7 +14,7 @@ module.exports = passport => {
         {
           include: [
             {
-              model: Role,
+              model: models.Role,
               attributes: ["roleName"],
               through: {
                 where: { userId: jwtPayload.id }

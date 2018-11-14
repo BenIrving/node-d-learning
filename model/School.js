@@ -1,22 +1,20 @@
-const sequelize = require("../db/db");
-const Sequelize = require("Sequelize");
-
-const School = sequelize.define(
-  "school",
-  {
-    schoolId: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+module.exports = (sequelize, DataTypes) => {
+  const School = sequelize.define(
+    "school",
+    {
+      schoolId: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+      },
+      schoolName: {
+        type: DataTypes.STRING(255)
+      }
     },
-    schoolName: {
-      type: Sequelize.STRING(255)
+    {
+      freezeTableName: true,
+      timestamps: false
     }
-  },
-  {
-    freezeTableName: true,
-    timestamps: false
-  }
-);
-
-module.exports = School;
+  );
+  return School;
+};
