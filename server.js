@@ -19,7 +19,6 @@ app.use("/api/user", User);
 
 app.use("/api/notificaton", notification);
 app.use("/api/story", story);
-let i = 0;
 
 app.use(router);
 

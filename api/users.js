@@ -6,26 +6,72 @@ const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const AvatarService = require("../service/AvatarService");
 const models = require("../model");
+const userService = require("../service/userService");
+const fs = require("fs");
 const {
   requireAdmin,
   requireStudent,
   requireTeacher
 } = require("../middleware/authurization");
 
-// @route     GET /users
+router.get(
+  "/async5sec",
+  passport.authenticate("jwt", { session: false }),
+  //requireAdmin,
+  (req, res) => {
+    userService.callFiveSecQuery().then(result => {
+      return res.json(result);
+    });
+  }
+);
+
+router.get(
+  "/sync5sec",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    let i = 0;
+    while (i < 10000000000) {
+      i++;
+    }
+    res.json({ msg: "loop completed" });
+  }
+);
+
+// @route     GET /user
 // @desc      Returns users list
 // @access    Public
 router.get(
   "/",
-  passport.authenticate("jwt", { session: false }),
-  requireAdmin,
+  // passport.authenticate("jwt", { session: false }),
+  //requireAdmin,
   (req, res) => {
-    models.User.findAll().then(users => {
-      const usersName = users.map(user => user.userName);
-      return res.json(usersName);
-    });
+    //userService.findAll().then(users => {
+    //const usersName = users.map(user => user.userName);
+    return res.json([
+      { userName: "1stUser" },
+      { userName: "2ndUser" },
+      { userName: "3rdUser" },
+      { userName: "4thUser" }
+    ]);
+    //});
   }
 );
+
+//***************************************************************************************************** */
+// @route     GET /user
+// @desc      Returns users list
+// @access    Public
+// router.get(
+//   "/",
+//   passport.authenticate("jwt", { session: false }),
+//   //requireAdmin,
+//   (req, res) => {
+//     userService.findAll().then(users => {
+//       const usersName = users.map(user => user.userName);
+//       return res.json(usersName);
+//     });
+//   }
+// );
 
 // @route     GET /users/avatar
 // @desc      Returns User's avatar
